@@ -30,7 +30,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_height="wrap_content"
-        android:text="name of costumer"
+        android:text="Welcome "
         tools:layout_editor_absoluteX="214dp"
         tools:layout_editor_absoluteY="111dp" />
 

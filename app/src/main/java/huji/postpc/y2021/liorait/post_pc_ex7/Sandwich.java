@@ -9,13 +9,13 @@ import java.util.Date;
 
 public class Sandwich implements Serializable{
 
-    private String id;
-    private String costumer_name;
-    private int pickles;
-    private boolean hummus;
-    private boolean tahini;
-    private String comment;
-    private String status;
+    private String id=null;
+    private String costumer_name="";
+    private int pickles=0;
+    private boolean hummus=false;
+    private boolean tahini=false;
+    private String comment="";
+    private String status=null;
     private String READY = "ready";
     private String DONE = "done";
     private String WAITING = "waiting";

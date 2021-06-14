@@ -1,7 +1,10 @@
 package huji.postpc.y2021.liorait.post_pc_ex7;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,8 +13,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +93,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+       // FirebaseApp.initializeApp(this);
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("users").
+                get().addOnSuccessListener(querySnapshot -> {
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    ArrayList <Sandwich> resultUsersClass = new ArrayList<>(); // todo change
+                    documents.forEach(documentSnapshot -> {
+                        Sandwich sandwich = documentSnapshot.toObject(Sandwich.class);
+                        if (sandwich != null) {
+                            resultUsersClass.add(sandwich);
+                        }
+
+                    });
+
+
+        }).addOnFailureListener(e -> {
+
+                }).addOnCanceledListener(() -> {
+
+                });
+
+
+
     }
+
 
 }
