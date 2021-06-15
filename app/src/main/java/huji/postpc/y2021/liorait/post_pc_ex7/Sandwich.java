@@ -9,21 +9,25 @@ import java.util.Date;
 
 public class Sandwich implements Serializable{
 
-    private String id=null;
-    private String costumer_name="";
-    private int pickles=0;
-    private boolean hummus=false;
-    private boolean tahini=false;
-    private String comment="";
-    private String status=null;
-    private String READY = "ready";
-    private String DONE = "done";
-    private String WAITING = "waiting";
-    private String IN_PROGRESS = "in progress";
+     String id = null;
+     String costumer_name="";
+     String pickles="0";
+     boolean hummus=false;
+     boolean tahini=false;
+     String comment="";
+     String status=null;
+     String READY = "ready";
+     String DONE = "done";
+     String WAITING = "waiting";
+     String IN_PROGRESS = "in progress";
 
-    public Sandwich(String id, String status) {
+    public Sandwich(String id, String status, String pickles, boolean hummus, boolean tahini, String comment) {
         this.id = id;
         this.status = status;
+        this.pickles = pickles;
+        this.hummus =hummus;
+        this.tahini = tahini;
+        this.comment = comment;
     }
 
     public void setStatus(String status) {
