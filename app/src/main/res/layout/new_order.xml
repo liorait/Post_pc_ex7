@@ -115,6 +115,20 @@
         tools:layout_editor_absoluteX="62dp"
         tools:layout_editor_absoluteY="374dp" />
 
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:textSize="11sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/welcomeTextView"
+        android:layout_marginBottom="20sp"
+        android:inputType="textPersonName"
+        android:text="Name: " />
+
     <ImageView
         android:id="@+id/x_image"
         app:layout_constraintLeft_toRightOf="@id/plus"
@@ -145,6 +159,8 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="-10dp">
+
+
 
 
     </LinearLayout>

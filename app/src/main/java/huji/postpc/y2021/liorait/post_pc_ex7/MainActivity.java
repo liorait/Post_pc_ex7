@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,16 +47,15 @@ public class MainActivity extends AppCompatActivity {
         if (dataBase == null) {
             dataBase = SandwichOrderApplication.getInstance().getDataBase();
         }
-            //dataBase.getOrderId();
-      //  if (dataBase.existsCurrentOrder()) {
-      //      existsOrder = true;
-      //  } else {
-      //      existsOrder = false;
-      //  }
 
-
-    //    dataBase.deleteOrder(dataBase.getId()); // todo delete
-
+      // dataBase.deleteOrder(dataBase.currentOrderId); // todo delete
+        // todo remove
+       // String id = UUID.randomUUID().toString();
+       // Sandwich newSandwich = new Sandwich(id, "waiting", "2", true, true, "comment");
+      //  dataBase.addNewOrder(newSandwich);
+        // todo until here remove
+        dataBase.getAllDocuments();
+       // dataBase.getCurrentDocument();
 
         if (!dataBase.existsCurrentOrder()) {
             //setContentView(R.layout.new_order);
@@ -65,17 +65,21 @@ public class MainActivity extends AppCompatActivity {
           //  startActivity(editIntent);
             // todo check if current order id is not null
             // put the relevant data into the intent
-            String orderId = dataBase.getId();
+            //String orderId = dataBase.getId();
 
-            if (orderId != null) {
-                editIntent.putExtra("id", dataBase.getId());
-            }
+
+
+           // if (orderId != null) {
+           //     editIntent.putExtra("id", dataBase.getId());
+           // }
             startActivity(editIntent);
            // setContentView(R.layout.new_order);
         } else {
             // todo get the state of the order
             String orderId = dataBase.getId();
-            String orderState = dataBase.getSandwich().getStatus(); //todo fix
+            System.out.println("i reached orderid ");
+         //   String orderState = dataBase.getSandwich().getStatus(); //todo fix
+            String orderState = dataBase.getState();
            // String  orderState="waiting";
             if (orderState.equals(WAITING)){
               //  System.out.println("error in state");
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (orderState.equals(IN_PROGRESS)){
                 // todo show in progress screen
+
             }
 
            // setContentView(R.layout.activity_main);

@@ -47,6 +47,7 @@
             app:layout_constraintTop_toBottomOf="@id/editCommentsEditText"
             tools:layout_editor_absoluteY="612dp" />
 
+
         <ImageView
             android:id="@+id/sandwichImageView"
             android:layout_width="156dp"
@@ -201,13 +202,24 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_height="61dp"
+            android:textSize="10sp"
             app:srcCompat="@android:drawable/ic_menu_save"
             tools:layout_editor_absoluteX="154dp"
             android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/editCommentsEditText"
             tools:layout_editor_absoluteY="612dp" />
 
-
+        <Button
+            android:id="@+id/deleteOrderButton"
+            android:layout_width="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/saveImageButton"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_delete"
+            android:text=""
+            tools:layout_editor_absoluteX="166dp"
+            tools:layout_editor_absoluteY="639dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,7 +25,7 @@ public class SandwichOrderApplication extends Application {
 
         // check if the current order id is stored in sp
         dataBase = new LocalDataBase(this); // pass the current context to allow broadcasts
-
+        // todo update the db info from firestore?
         // checks if there exists current order
       //  boolean existsOrder = dataBase.existsCurrentOrder();
        // if (existsOrder = false){

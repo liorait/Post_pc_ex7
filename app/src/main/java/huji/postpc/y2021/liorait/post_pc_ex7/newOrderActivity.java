@@ -49,6 +49,7 @@ public class newOrderActivity extends Activity {
         CheckBox hummusCB = findViewById(R.id.addHummusCheckBox);
         CheckBox tahiniCB = findViewById(R.id.addTahiniCheckBox);
         EditText commentText = findViewById(R.id.editCommentsEditText);
+        EditText costumerName = findViewById(R.id.editTextTextPersonName);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +58,7 @@ public class newOrderActivity extends Activity {
                 boolean hummus=false;
                 boolean tahini=false;
                 String comment="";
+                String costumer_name = "";
 
                 // if hummus is checked
                 if (hummusCB.isChecked()){
@@ -66,11 +68,12 @@ public class newOrderActivity extends Activity {
                     tahini = true;
                 }
                 comment = commentText.getText().toString();
+                costumer_name = costumerName.getText().toString();
 
                 String orderId = UUID.randomUUID().toString();
-                Sandwich newSandwich = new Sandwich(orderId, "waiting", pickles, hummus, tahini, comment);
+                Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", pickles, hummus, tahini, comment);
                 dataBase.addNewOrder(newSandwich);
-                setContentView(R.layout.edit_order);
+                //setContentView(R.layout.edit_order);
             }
         });
 
