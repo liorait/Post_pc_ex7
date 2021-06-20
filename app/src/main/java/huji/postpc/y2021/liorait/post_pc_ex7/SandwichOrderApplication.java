@@ -3,6 +3,7 @@ package huji.postpc.y2021.liorait.post_pc_ex7;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Build;
+import android.view.View;
 
 import androidx.annotation.RequiresApi;
 
@@ -44,8 +45,11 @@ public class SandwichOrderApplication extends Application {
 
             document.get().addOnSuccessListener(documentSnapshot -> {
                 Sandwich currentOrder = documentSnapshot.toObject(Sandwich.class);
-                dataBase.current_state = currentOrder.getStatus();
-                System.out.println("the current status is: " + currentOrder.getStatus());
+                if (currentOrder != null) {
+                    dataBase.current_state = currentOrder.getStatus();
+                    System.out.println("the current status is: " + currentOrder.getStatus());
+                }
+
 
             }).addOnCompleteListener(task -> {
                 System.out.println("completed task");
@@ -53,8 +57,10 @@ public class SandwichOrderApplication extends Application {
             });
 
             document.addSnapshotListener((value, error) -> {
-                Sandwich currentOrder = value.toObject(Sandwich.class);
-                dataBase.current_state = currentOrder.getStatus();
+                if ((value != null) && (value.exists())) {
+                    Sandwich currentOrder = value.toObject(Sandwich.class);
+                    dataBase.current_state = currentOrder.getStatus();
+                }
             });
         }
     }

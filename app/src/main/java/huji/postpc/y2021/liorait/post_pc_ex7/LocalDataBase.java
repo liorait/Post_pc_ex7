@@ -236,12 +236,12 @@ public class LocalDataBase {
 
     public void deleteOrder(String orderId){
 
+        deleteFromFirestore("orders", orderId);
+
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(orderId); // remove the key
-       // editor.clear(); // delete all info from sp
+        // editor.clear(); // delete all info from sp
         editor.apply();
-
-        deleteFromFirestore("orders", orderId);
         currentOrderId = null;
     }
 

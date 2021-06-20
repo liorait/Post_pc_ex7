@@ -75,7 +75,7 @@
         android:layout_height="112dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Add any comments.."
+        android:hint="Add any comments.."
         app:layout_constraintHorizontal_bias="0.427"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
