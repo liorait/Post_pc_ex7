@@ -1,6 +1,7 @@
 package huji.postpc.y2021.liorait.post_pc_ex7;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -33,7 +35,7 @@ public class newOrderActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Context context = this;
         setContentView(R.layout.new_order);
 
         if (dataBase == null){
@@ -55,29 +57,38 @@ public class newOrderActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String pickles = numberOfPicklesText.getText().toString();
-                boolean hummus=false;
-                boolean tahini=false;
-                String comment="";
-                String costumer_name = "";
-
-                // if hummus is checked
-                if (hummusCB.isChecked()){
-                    hummus = true;
+                int picklesNum = Integer.parseInt(pickles);
+                if (picklesNum > 10){
+                    Toast.makeText(context,"Wrong amount of pickles", Toast.LENGTH_SHORT).show();
                 }
-                if (tahiniCB.isChecked()){
-                    tahini = true;
-                }
-                comment = commentText.getText().toString();
-                costumer_name = costumerName.getText().toString();
+                else {
+                    boolean hummus = false;
+                    boolean tahini = false;
+                    String comment = "";
+                    String costumer_name = "";
 
-                String orderId = UUID.randomUUID().toString();
-                Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", pickles, hummus, tahini, comment);
-                dataBase.addNewOrder(newSandwich);
-                //setContentView(R.layout.edit_order);
+                    // if hummus is checked
+                    if (hummusCB.isChecked()) {
+                        hummus = true;
+                    }
+                    if (tahiniCB.isChecked()) {
+                        tahini = true;
+                    }
+                    comment = commentText.getText().toString();
+                    costumer_name = costumerName.getText().toString();
+
+                    String orderId = UUID.randomUUID().toString();
+                    Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", pickles, hummus, tahini, comment);
+                    dataBase.addNewOrder(newSandwich);
+
+                    Intent editIntent = new Intent(newOrderActivity.this, editActivity.class);
+                    startActivity(editIntent);
+                    //setContentView(R.layout.edit_order);
+                }
             }
         });
 
-
+      //  setContentView(R.layout.edit_order);
 
         MinusBtn.setOnClickListener(v -> {
             int parsed = Integer.parseInt(numberOfPicklesText.getText().toString());

@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".newOrderActivity"></activity>
         <activity android:name=".editActivity"></activity>
+        <activity android:name=".OrderReady"></activity>
     </application>
 
 </manifest>

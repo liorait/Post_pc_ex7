@@ -2,6 +2,7 @@ package huji.postpc.y2021.liorait.post_pc_ex7;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -81,16 +82,26 @@ public class editActivity extends Activity {
 
         //DocumentReference document = firestore.collection("orders").document(dataBase.currentOrderId);
         document.addSnapshotListener((value, error) -> {
-            Sandwich currentOrder = value.toObject(Sandwich.class);
-            if (currentOrder.getStatus().equals("in_progress")){
-                setContentView(R.layout.activity_main);
+            if ((value != null) && (value.exists())) {
+                Sandwich currentOrder = value.toObject(Sandwich.class);
+                if (currentOrder.getStatus().equals("in_progress")) {
+                    setContentView(R.layout.order_in_the_making);
+                }
+                if (currentOrder.getStatus().equals("ready")) {
+                    Intent orderReadyIntent = new Intent(editActivity.this, OrderReady.class);
+                    startActivity(orderReadyIntent);
+                    // setContentView(R.layout.order_ready_screen);
+                }
             }
         });
 
         deleteButton.setOnClickListener(v -> {
-         //   document.delete();
+           // document.delete();
+
             dataBase.deleteOrder(dataBase.currentOrderId);
-            setContentView(R.layout.new_order);
+            Intent newOrder = new Intent(editActivity.this, newOrderActivity.class);
+            startActivity(newOrder);
+            //setContentView(R.layout.new_order);
         });
 
       //  if (currentOrder == null) {
@@ -116,28 +127,34 @@ public class editActivity extends Activity {
                // Sandwich currentOrder = dataBase.getSandwich();
 
                 String pickles = numberOfPicklesText.getText().toString();
-                boolean hummus=false;
-                boolean tahini=false;
-                String comment="";
-
-                // if hummus is checked
-                if (hummusCB.isChecked()){
-                    hummus = true;
+                int picklesNum = Integer.parseInt(pickles);
+                if (picklesNum > 10){
+                    Toast.makeText(context,"Wrong amount of pickles", Toast.LENGTH_SHORT).show();
                 }
-                if (tahiniCB.isChecked()){
-                    tahini = true;
+                else {
+                    boolean hummus = false;
+                    boolean tahini = false;
+                    String comment = "";
+
+                    // if hummus is checked
+                    if (hummusCB.isChecked()) {
+                        hummus = true;
+                    }
+                    if (tahiniCB.isChecked()) {
+                        tahini = true;
+                    }
+                    comment = commentText.getText().toString();
+                    String costumer_name = costumerName.getText().toString(); // todo fix only name
+
+                    //  String orderId = currentOrder.getId();
+                    String orderId = dataBase.currentOrderId;
+                    Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", pickles, hummus, tahini, comment);
+                    dataBase.updateOrder(newSandwich);
+
+                    // todo show message that changes are saved
+                    Toast.makeText(context, "Order was successfully saved", Toast.LENGTH_SHORT).show();
+                    //setContentView(R.layout.activity_main);
                 }
-                comment = commentText.getText().toString();
-                String costumer_name = costumerName.getText().toString(); // todo fix only name
-
-              //  String orderId = currentOrder.getId();
-                String orderId = dataBase.currentOrderId;
-                Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", pickles, hummus, tahini, comment);
-                dataBase.updateOrder(newSandwich);
-
-                // todo show message that changes are saved
-                Toast.makeText(context, "Order was successfully saved", Toast.LENGTH_SHORT).show();
-                //setContentView(R.layout.activity_main);
             }
         });
 

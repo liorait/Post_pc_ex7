@@ -36,10 +36,13 @@ public class LocalDataBase {
     private final Context context;
     private final SharedPreferences sp;
     public String currentOrderId = null; // ID for SP
-    private String state = null;
+    public String current_state = "waiting";
+
+
+    //private String state = null;
     String ORDERS = "orders";
-    private Sandwich sandwich;
-    private String current_state = "waiting";
+    //private Sandwich sandwich;
+
     ArrayList<Sandwich> sandwiches_list = new ArrayList<>();
     // todo create local list saving the data that is saved in firestore
     private HashMap<String, Sandwich> all_orders = new HashMap<>();
@@ -65,6 +68,32 @@ public class LocalDataBase {
 
     public boolean existsCurrentOrder(){
         return currentOrderId != null;
+    }
+
+    public void gotOrder(){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference document = firestore.collection("orders").document(currentOrderId);
+
+        document.get().addOnSuccessListener(documentSnapshot -> {
+            Sandwich sandwich = documentSnapshot.toObject(Sandwich.class);
+            sandwich.setStatus("done");
+            document.set(sandwich).addOnSuccessListener(aVoid -> {
+                System.out.println("sandwich state updated in firestore");
+            });
+          //  sandwich.setStatus("done");
+        });
+
+        //current_state = "done";
+        //currentOrderId = null;
+
+        // update the sp
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove(currentOrderId); // remove the key
+        // editor.clear(); // delete all info from sp
+        editor.apply();
+
+        currentOrderId = null;
+
     }
 
     public Sandwich getSandwich(){
@@ -102,7 +131,7 @@ public class LocalDataBase {
         // todo id should be saves in sp
         firestore.collection("orders").document(currentOrderId).get().addOnSuccessListener(documentSnapshot -> {
             Sandwich sandwich = documentSnapshot.toObject(Sandwich.class);
-            state = sandwich.getStatus();
+            current_state = sandwich.getStatus();
         });
       //  return state;
     }
@@ -111,7 +140,7 @@ public class LocalDataBase {
        // getCurrentOrderStateFromFirestore();
       //  Sandwich
         return current_state;
-     //   return all_orders.get(currentOrderId).getStatus();
+       // return all_orders.get(currentOrderId).getStatus();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -126,7 +155,7 @@ public class LocalDataBase {
         // save in local list todo save the list in sp maybe?
         all_orders.put(newOrder.getId(), newOrder);
         currentOrderId = newOrder.getId();
-
+        current_state = "waiting";
         // add to firestore firebase
         addToFirestore(newOrder);
     }
@@ -209,10 +238,11 @@ public class LocalDataBase {
 
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(orderId); // remove the key
+       // editor.clear(); // delete all info from sp
         editor.apply();
-        currentOrderId = null;
 
         deleteFromFirestore("orders", orderId);
+        currentOrderId = null;
     }
 
 }

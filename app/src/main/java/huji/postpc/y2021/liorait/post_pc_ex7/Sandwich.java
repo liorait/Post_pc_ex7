@@ -12,6 +12,7 @@ public class Sandwich implements Serializable{
      String id = null;
      String costumer_name = "";
      String pickles="0";
+     // todo change pickles field to int
      boolean hummus=false;
      boolean tahini=false;
      String comment="";
