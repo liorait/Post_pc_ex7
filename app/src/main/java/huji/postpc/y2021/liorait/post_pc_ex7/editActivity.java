@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.io.Serializable;
 import java.util.UUID;
 import android.widget.Toast;
 public class editActivity extends Activity {
@@ -62,6 +63,12 @@ public class editActivity extends Activity {
         TextView costumerName = findViewById(R.id.nameTextView);
         saveButton.setEnabled(false);
 
+        if (savedInstanceState != null){
+            Serializable saved_output = savedInstanceState.getSerializable("saved_state");
+            loadState(saved_output);
+        }
+
+
         // display information on the screen
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference document = firestore.collection("orders").document(dataBase.currentOrderId);
@@ -91,12 +98,12 @@ public class editActivity extends Activity {
             if ((value != null) && (value.exists())) {
                 Sandwich currentOrder = value.toObject(Sandwich.class);
                 if (currentOrder.getStatus().equals("in_progress")) {
-                    dataBase.current_state = "in_progress";
+                    dataBase.setState("in_progress");
                     setContentView(R.layout.order_in_the_making);
                 }
                 if (currentOrder.getStatus().equals("ready")) {
                     Intent orderReadyIntent = new Intent(editActivity.this, OrderReady.class);
-                    dataBase.current_state = "ready";
+                    dataBase.setState("ready");
                     startActivity(orderReadyIntent);
                 }
             }
@@ -204,6 +211,8 @@ public class editActivity extends Activity {
                 }
             }
         });
+
+
     }
 
     @Override
@@ -212,4 +221,76 @@ public class editActivity extends Activity {
         // remove listener
         listener.remove();
     }
+
+    // flip screen
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Serializable serializable = saveState();
+        outState.putSerializable("saved_state", serializable);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Serializable saved_output = savedInstanceState.getSerializable("saved_state");
+        loadState(saved_output);
+    }
+
+    public Serializable saveState() {
+        newOrderActivity.OrderState order_state = new newOrderActivity.OrderState();
+
+
+        EditText numberOfPicklesText = findViewById(R.id.editNumberPicklesText);
+        CheckBox hummusCB = findViewById(R.id.addHummusCheckBox);
+        CheckBox tahiniCB = findViewById(R.id.addTahiniCheckBox);
+        EditText commentText = findViewById(R.id.editCommentsEditText);
+        TextView costumerName = findViewById(R.id.nameTextView);
+
+        order_state.comment = commentText.getText().toString();
+        order_state.costumer_name = costumerName.getText().toString();
+        if (hummusCB.isChecked()){
+            order_state.hummus = true;
+        }
+        else{
+            order_state.hummus = false;
+        }
+        if (tahiniCB.isChecked()){
+            order_state.tahini = true;
+        }
+        else{
+            order_state.tahini = false;
+        }
+        String pickles_str = numberOfPicklesText.getText().toString();
+        order_state.number_of_pickles = Integer.parseInt(pickles_str);
+
+        return order_state;
+    }
+
+    public void loadState(Serializable prevState) {
+        if (!(prevState instanceof newOrderActivity.OrderState)) {
+            return; // ignore
+        }
+        newOrderActivity.OrderState casted = (newOrderActivity.OrderState) prevState;
+
+        EditText numberOfPicklesText = findViewById(R.id.editNumberPicklesText);
+        CheckBox hummusCB = findViewById(R.id.addHummusCheckBox);
+        CheckBox tahiniCB = findViewById(R.id.addTahiniCheckBox);
+        EditText commentText = findViewById(R.id.editCommentsEditText);
+        EditText costumerName = findViewById(R.id.editTextTextPersonName);
+
+        String pickles = Integer.toString(casted.number_of_pickles);
+        numberOfPicklesText.setText(pickles);
+        commentText.setText(casted.comment);
+        costumerName.setText(casted.costumer_name);
+
+        if (casted.hummus){
+            hummusCB.setChecked(true);
+        }
+        if (casted.tahini){
+            tahiniCB.setChecked(true);
+        }
+    }
+
 }

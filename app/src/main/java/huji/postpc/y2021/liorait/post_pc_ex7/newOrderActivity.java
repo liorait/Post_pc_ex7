@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,8 +25,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.UUID;
 
 public class newOrderActivity extends Activity {
@@ -52,6 +56,11 @@ public class newOrderActivity extends Activity {
         CheckBox tahiniCB = findViewById(R.id.addTahiniCheckBox);
         EditText commentText = findViewById(R.id.editCommentsEditText);
         EditText costumerName = findViewById(R.id.editTextTextPersonName);
+
+        if (savedInstanceState != null){
+            Serializable saved_output = savedInstanceState.getSerializable("saved_state");
+            loadState(saved_output);
+        }
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,8 +155,86 @@ public class newOrderActivity extends Activity {
         });
     }
 
+    // flip screen
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Serializable serializable = saveState();
+        outState.putSerializable("saved_state", serializable);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Serializable saved_output = savedInstanceState.getSerializable("saved_state");
+        loadState(saved_output);
+    }
+
+    public Serializable saveState() {
+        OrderState order_state = new OrderState();
+
+        EditText numberOfPicklesText = findViewById(R.id.editNumberPicklesText);
+        CheckBox hummusCB = findViewById(R.id.addHummusCheckBox);
+        CheckBox tahiniCB = findViewById(R.id.addTahiniCheckBox);
+        EditText commentText = findViewById(R.id.editCommentsEditText);
+        EditText costumerName = findViewById(R.id.editTextTextPersonName);
+
+        order_state.comment = commentText.getText().toString();
+        order_state.costumer_name = costumerName.getText().toString();
+        if (hummusCB.isChecked()){
+            order_state.hummus = true;
+        }
+        else{
+            order_state.hummus = false;
+        }
+        if (tahiniCB.isChecked()){
+            order_state.tahini = true;
+        }
+        else{
+            order_state.tahini = false;
+        }
+        String pickles_str = numberOfPicklesText.getText().toString();
+        order_state.number_of_pickles = Integer.parseInt(pickles_str);
+
+        return order_state;
+    }
+
+    public void loadState(Serializable prevState) {
+        if (!(prevState instanceof OrderState)) {
+            return; // ignore
+        }
+        OrderState casted = (OrderState) prevState;
+
+        EditText numberOfPicklesText = findViewById(R.id.editNumberPicklesText);
+        CheckBox hummusCB = findViewById(R.id.addHummusCheckBox);
+        CheckBox tahiniCB = findViewById(R.id.addTahiniCheckBox);
+        EditText commentText = findViewById(R.id.editCommentsEditText);
+        EditText costumerName = findViewById(R.id.editTextTextPersonName);
+
+        String pickles = Integer.toString(casted.number_of_pickles);
+        numberOfPicklesText.setText(pickles);
+        commentText.setText(casted.comment);
+        costumerName.setText(casted.costumer_name);
+
+        if (casted.hummus){
+            hummusCB.setChecked(true);
+        }
+        if (casted.tahini){
+            tahiniCB.setChecked(true);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    public static class OrderState implements Serializable {
+         String costumer_name;
+         int number_of_pickles;
+         boolean hummus;
+         boolean tahini;
+         String comment;
     }
 }

@@ -39,19 +39,19 @@ public class SandwichOrderApplication extends Application {
             document.get().addOnSuccessListener(documentSnapshot -> {
                 Sandwich currentOrder = documentSnapshot.toObject(Sandwich.class);
                 if (currentOrder != null) {
-                    dataBase.current_state = currentOrder.getStatus();
+                    dataBase.setState(currentOrder.getStatus());
                 }
 
 
             }).addOnCompleteListener(task -> {
                 Log.i("tag", "completed task");
-                order_state.set(dataBase.current_state);
+                order_state.set(dataBase.getState());
             });
 
             document.addSnapshotListener((value, error) -> {
                 if ((value != null) && (value.exists())) {
                     Sandwich currentOrder = value.toObject(Sandwich.class);
-                    dataBase.current_state = currentOrder.getStatus();
+                    dataBase.setState(currentOrder.getStatus());
                 }
             });
         }

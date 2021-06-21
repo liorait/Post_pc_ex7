@@ -36,7 +36,7 @@ public class LocalDataBase {
     private final Context context;
     private final SharedPreferences sp;
     public String currentOrderId = null; // ID for SP
-    public String current_state = "waiting";
+    private String current_state = "waiting";
     String ORDERS = "orders";
 
     ArrayList<Sandwich> sandwiches_list = new ArrayList<>();
@@ -64,7 +64,9 @@ public class LocalDataBase {
         return currentOrderId != null;
     }
 
+    // notify that the user got the order (change the status of the order to 'done' and remove it from sp)
     public void gotOrder(){
+
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference document = firestore.collection("orders").document(currentOrderId);
 
@@ -72,13 +74,9 @@ public class LocalDataBase {
             Sandwich sandwich = documentSnapshot.toObject(Sandwich.class);
             sandwich.setStatus("done");
             document.set(sandwich).addOnSuccessListener(aVoid -> {
-                System.out.println("sandwich state updated in firestore");
+                Log.i("tag", "sandwich state updated in firestore");
             });
-          //  sandwich.setStatus("done");
         });
-
-        //current_state = "done";
-        //currentOrderId = null;
 
         // update the sp
         SharedPreferences.Editor editor = sp.edit();
@@ -87,23 +85,10 @@ public class LocalDataBase {
         editor.apply();
 
         currentOrderId = null;
-
     }
 
+    // get sandwich with the current order id that is saved in local all_orders map
     public Sandwich getSandwich(){
-       // Sandwich sandwich = null;
-       // FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        // todo id should be saves in sp
-     //   DocumentReference document = firestore.collection("orders").document(currentOrderId);
-       // document.get().addOnSuccessListener(documentSnapshot -> {
-       //     sandwich = documentSnapshot.toObject(Sandwich.class);
-    //    });
-        //firestore.collection("orders").document(currentOrderId).get().addOnSuccessListener(documentSnapshot -> {
-      //      sandwich = documentSnapshot.toObject(Sandwich.class);
-           // sandwich = new Sandwich(currentOrderId, )
-      //  });
-      //  return sandwich;
-      //  return sandwiches_list.
         if (all_orders.size() != 0) {
             return all_orders.get(currentOrderId);
         }
@@ -113,16 +98,13 @@ public class LocalDataBase {
         }
     }
 
+    // get the id of the current order
     public String getId(){
         return currentOrderId;
     }
 
     private void getCurrentOrderStateFromFirestore(){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        // first get the list of documents
-
-
-        // todo id should be saves in sp
         firestore.collection("orders").document(currentOrderId).get().addOnSuccessListener(documentSnapshot -> {
             Sandwich sandwich = documentSnapshot.toObject(Sandwich.class);
             current_state = sandwich.getStatus();
@@ -130,11 +112,16 @@ public class LocalDataBase {
       //  return state;
     }
 
+    // returns the current state of the order
     public String getState(){
-       // getCurrentOrderStateFromFirestore();
-      //  Sandwich
         return current_state;
-       // return all_orders.get(currentOrderId).getStatus();
+    }
+
+    // set the current state of the order
+    public void setState(String state){
+        if (state.equals("waiting") || state.equals("ready") || state.equals("in_progress")){
+            current_state = state;
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -190,10 +177,11 @@ public class LocalDataBase {
         });
     }
 
+    // delete order from fire store
     private void deleteFromFirestore(String collection, String id){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore.collection(collection).document(id).delete().addOnSuccessListener(aVoid -> {
-            System.out.println("delete done!");
+            Log.i("tag", "deleted order from firestore");
         });
     }
 
@@ -202,27 +190,27 @@ public class LocalDataBase {
         String id = sandwich.getId();
         DocumentReference document = firestore.collection("orders").document(id);
         document.set(sandwich).addOnSuccessListener(aVoid -> {
-            System.out.println("update done!");
+            Log.i("tag", "updated order in firestore");
         });
     }
 
+    // updates the current order
     public void updateOrder(Sandwich sandwich){
 
         // update order in local db
         all_orders.put(sandwich.getId(), sandwich);
-
         updateOrderToFireStore(sandwich);
     }
 
+    // deleted the current order
     public void deleteOrder(String orderId){
 
         deleteFromFirestore("orders", orderId);
 
         SharedPreferences.Editor editor = sp.edit();
-        editor.remove(orderId); // remove the key
+        editor.remove(orderId); // removes the key
         // editor.clear(); // delete all info from sp
         editor.apply();
         currentOrderId = null;
     }
-
 }
