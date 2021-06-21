@@ -19,20 +19,18 @@ public class OrderReady extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_ready_screen);
 
+        // find view
+        Button gotItButton = findViewById(R.id.gotTheOrderButton);
         Context context = this;
+
         if (dataBase == null) {
             dataBase = SandwichOrderApplication.getInstance().getDataBase();
         }
 
-        Button gotItButton = findViewById(R.id.gotTheOrderButton);
-
         gotItButton.setOnClickListener(v -> {
-          //  Sandwich updatedOrder = new Sandwich()
-            dataBase.gotOrder();
+            dataBase.gotOrder(); // notify that received the order (change the order state to 'done' and delete the order from sp)
             Intent newOrder = new Intent(OrderReady.this, newOrderActivity.class);
             startActivity(newOrder);
-           // SandwichOrderApplication s = new SandwichOrderApplication();
-          //  s.onCreate();
         });
     }
 }

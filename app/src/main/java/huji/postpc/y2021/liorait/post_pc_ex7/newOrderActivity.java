@@ -38,7 +38,7 @@ public class newOrderActivity extends Activity {
         Context context = this;
         setContentView(R.layout.new_order);
 
-        if (dataBase == null){
+        if (dataBase == null) {
             dataBase = SandwichOrderApplication.getInstance().getDataBase();
         }
 
@@ -69,7 +69,6 @@ public class newOrderActivity extends Activity {
                         boolean hummus = false;
                         boolean tahini = false;
                         String comment = "";
-                        //String costumer_name = "";
 
                         // if hummus is checked
                         if (hummusCB.isChecked()) {
@@ -87,13 +86,10 @@ public class newOrderActivity extends Activity {
 
                         Intent editIntent = new Intent(newOrderActivity.this, editActivity.class);
                         startActivity(editIntent);
-                        //setContentView(R.layout.edit_order);
                     }
                 }
             }
         });
-
-      //  setContentView(R.layout.edit_order);
 
         MinusBtn.setOnClickListener(v -> {
             int parsed = Integer.parseInt(numberOfPicklesText.getText().toString());
@@ -132,62 +128,19 @@ public class newOrderActivity extends Activity {
             @Override
             public void afterTextChanged(Editable s) {
                 String text = numberOfPicklesText.getText().toString();
-                if (text.equals("")){
+                if (text.equals("")) {
                     return;
                 }
                 int text_num = 0;
                 try {
                     text_num = Integer.parseInt(text);
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     System.out.println("wrong text");
                 }
-                if (text_num > 10){
+                if (text_num > 10) {
                     x_image_view.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     x_image_view.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("users").
-                get().addOnSuccessListener(querySnapshot -> {
-            List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-            ArrayList<Sandwich> resultUsersClass = new ArrayList<>(); // todo change
-            documents.forEach(documentSnapshot -> {
-                Sandwich sandwich = documentSnapshot.toObject(Sandwich.class);
-                if (sandwich != null) {
-                    resultUsersClass.add(sandwich);
-                }
-
-            });
-
-
-        }).addOnFailureListener(e -> {
-
-        }).addOnCanceledListener(() -> {
-
-        });
-    }
-    ListenerRegistration listener = null;
-    public void listener(String collection, String documentId){
-        listener = FirebaseFirestore.getInstance().collection(collection).document(documentId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null){ //todo error
-                }
-                else if (value == null) {//todo handle value
-                }
-                else if(!value.exists()){
-                    // todo value was deleted
-
-                }
-                else{
-                    Sandwich sandwich = value.toObject(Sandwich.class);
-
-
                 }
             }
         });
@@ -196,7 +149,5 @@ public class newOrderActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // todo remove listener
-        listener.remove();
     }
 }

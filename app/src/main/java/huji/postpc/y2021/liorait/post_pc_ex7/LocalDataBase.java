@@ -142,14 +142,13 @@ public class LocalDataBase {
 
         // update sp of the changes
         SharedPreferences.Editor editor = sp.edit();
-        // todo verify status is waiting
         editor.putString(newOrder.getId(), newOrder.getStatus());
         editor.apply();
 
-        // save in local list todo save the list in sp maybe?
         all_orders.put(newOrder.getId(), newOrder);
         currentOrderId = newOrder.getId();
         current_state = "waiting";
+
         // add to firestore firebase
         addToFirestore(newOrder);
     }
@@ -178,30 +177,17 @@ public class LocalDataBase {
         System.out.println(sandwiches_list);
     }
 
+    // Adds a new order to firestore database
     private void addToFirestore(Sandwich newOrder){
+
         // get the firestore instance
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         String orderId = newOrder.getId();
-        System.out.println("---------------------reach addToFirestore");
-
-     //   firestore.collection("orders").add(newOrder).addOnSuccessListener(documentReference -> {
-       //           System.out.println("addition done!");
-       // });
 
         DocumentReference document = firestore.collection("orders").document(orderId);
         document.set(newOrder).addOnSuccessListener(aVoid -> {
-            System.out.println("--------------------------------------------addition done!");
+            Log.i("tag", "added a new order to firestore db");
         });
-
-      //  firestore.collection("orders").document(orderId).set(newOrder).addOnSuccessListener(aVoid ->
-         //       System.out.println("--------------------------------------------addition done!"));
-
-        // now when i add an order the id is the current id
-        // todo this is the right way to add
-
-      //  firestore.collection("orders").add(newOrder).addOnSuccessListener(documentReference -> {
-      //      System.out.println("addition done!");
-      //  });
     }
 
     private void deleteFromFirestore(String collection, String id){

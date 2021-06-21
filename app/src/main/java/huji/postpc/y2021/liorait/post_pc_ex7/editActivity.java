@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,11 +29,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.UUID;
 import android.widget.Toast;
 public class editActivity extends Activity {
     public LocalDataBase dataBase = null;
+    ListenerRegistration listener;
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -58,13 +61,14 @@ public class editActivity extends Activity {
         EditText commentText = findViewById(R.id.editCommentsEditText);
         TextView costumerName = findViewById(R.id.nameTextView);
         saveButton.setEnabled(false);
-        Sandwich currentSandwich;
+
         // display information on the screen
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference document = firestore.collection("orders").document(dataBase.currentOrderId);
 
         document.get().addOnSuccessListener(documentSnapshot -> {
             Sandwich currentOrder = documentSnapshot.toObject(Sandwich.class);
+
             int pickles_num = currentOrder.getPickles();
             String pickles = Integer.toString(pickles_num);
             numberOfPicklesText.setText(pickles); // show number of pickles
@@ -79,56 +83,36 @@ public class editActivity extends Activity {
             costumerName.setText(costumer_name + " ,Your order is waiting. You can edit your order");
 
         }).addOnCompleteListener(task -> {
-            System.out.println("completed task");
+            Log.i("tag", "completed task");
             saveButton.setEnabled(true);
         });
 
-        //DocumentReference document = firestore.collection("orders").document(dataBase.currentOrderId);
-        document.addSnapshotListener((value, error) -> {
+         listener = document.addSnapshotListener((value, error) -> {
             if ((value != null) && (value.exists())) {
                 Sandwich currentOrder = value.toObject(Sandwich.class);
                 if (currentOrder.getStatus().equals("in_progress")) {
+                    dataBase.current_state = "in_progress";
                     setContentView(R.layout.order_in_the_making);
                 }
                 if (currentOrder.getStatus().equals("ready")) {
                     Intent orderReadyIntent = new Intent(editActivity.this, OrderReady.class);
+                    dataBase.current_state = "ready";
                     startActivity(orderReadyIntent);
-                    // setContentView(R.layout.order_ready_screen);
                 }
             }
         });
 
         deleteButton.setOnClickListener(v -> {
-           // document.delete();
-
             dataBase.deleteOrder(dataBase.currentOrderId);
-            Toast.makeText(context,"Your order was successfuly deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Your order was successfully deleted", Toast.LENGTH_SHORT).show();
             Intent newOrder = new Intent(editActivity.this, newOrderActivity.class);
             startActivity(newOrder);
-            //setContentView(R.layout.new_order);
         });
-
-      //  if (currentOrder == null) {
-      //      return;
-      //  }
-       // System.out.println(currentOrder.toString());
-      //  numberOfPicklesText.setText(currentOrder.getPickles()); // show number of pickles
-     //   commentText.setText(currentOrder.getComment()); // show comment
-      //  if (currentOrder.hummus){
-      //      hummusCB.setChecked(true);
-     //   }
-     //   if (currentOrder.tahini){
-      //      tahiniCB.setChecked(true);
-      //  }
-      //  costumerName.setText(currentOrder.getCostumerName());
-
-
 
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Sandwich currentOrder = dataBase.getSandwich();
                 String costumer_name = costumerName.getText().toString();
 
                 if (costumer_name.equals("")) {
@@ -153,14 +137,11 @@ public class editActivity extends Activity {
                         comment = commentText.getText().toString();
                         costumer_name = costumerName.getText().toString();
 
-                        //  String orderId = currentOrder.getId();
                         String orderId = dataBase.currentOrderId;
                         Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", picklesNum, hummus, tahini, comment);
                         dataBase.updateOrder(newSandwich);
 
-                        // todo show message that changes are saved
                         Toast.makeText(context, "Order was successfully saved", Toast.LENGTH_SHORT).show();
-                        //setContentView(R.layout.activity_main);
                     }
                 }
             }
@@ -223,7 +204,12 @@ public class editActivity extends Activity {
                 }
             }
         });
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // remove listener
+        listener.remove();
     }
 }

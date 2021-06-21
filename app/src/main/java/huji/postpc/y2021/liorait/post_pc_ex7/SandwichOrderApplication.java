@@ -3,6 +3,7 @@ package huji.postpc.y2021.liorait.post_pc_ex7;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
@@ -16,7 +17,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class SandwichOrderApplication extends Application {
 
     private static SandwichOrderApplication instance = null;
-    private static String orderId = null;
     private LocalDataBase dataBase;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -28,16 +28,9 @@ public class SandwichOrderApplication extends Application {
         FirebaseFirestore.getInstance();
         instance = this;
 
-
-        // check if the current order id is stored in sp
         dataBase = new LocalDataBase(this); // pass the current context to allow broadcasts
         // todo update the db info from firestore?
 
-        // checks if there exists current order
-      //  boolean existsOrder = dataBase.existsCurrentOrder();
-       // if (existsOrder = false){
-
-    //    }
         AtomicReference<String> order_state = new AtomicReference<>("");
         if (dataBase.currentOrderId != null) {
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -47,12 +40,11 @@ public class SandwichOrderApplication extends Application {
                 Sandwich currentOrder = documentSnapshot.toObject(Sandwich.class);
                 if (currentOrder != null) {
                     dataBase.current_state = currentOrder.getStatus();
-                    System.out.println("the current status is: " + currentOrder.getStatus());
                 }
 
 
             }).addOnCompleteListener(task -> {
-                System.out.println("completed task");
+                Log.i("tag", "completed task");
                 order_state.set(dataBase.current_state);
             });
 
@@ -70,5 +62,4 @@ public class SandwichOrderApplication extends Application {
     public LocalDataBase getDataBase(){
         return dataBase;
     }
-
 }

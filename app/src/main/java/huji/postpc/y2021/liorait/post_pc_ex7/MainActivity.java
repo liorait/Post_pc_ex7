@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     String DONE = "done";
     String WAITING = "waiting";
     String IN_PROGRESS = "in progress";
+    //ListenerRegistration listener;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -48,90 +49,35 @@ public class MainActivity extends AppCompatActivity {
         if (dataBase == null) {
             dataBase = SandwichOrderApplication.getInstance().getDataBase();
         }
-        /**
-        final String[] order_state = {""};
 
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference document = firestore.collection("orders").document(dataBase.currentOrderId);
-
-        document.get().addOnSuccessListener(documentSnapshot -> {
-            Sandwich currentOrder = documentSnapshot.toObject(Sandwich.class);
-            dataBase.current_state = currentOrder.getStatus();
-            System.out.println("the current status is: " + currentOrder.getStatus());
-
-        }).addOnCompleteListener(task -> {
-            System.out.println("completed task");
-            order_state[0] = dataBase.current_state;
-        });
-
-        document.addSnapshotListener((value, error) -> {
-            Sandwich currentOrder = value.toObject(Sandwich.class);
-            if (currentOrder.getStatus().equals("in_progress")){
-                setContentView(R.layout.order_in_the_making);
-            }
-            if (currentOrder.getStatus().equals("ready")){
-                Intent orderReadyIntent = new Intent(MainActivity.this, OrderReady.class);
-                startActivity(orderReadyIntent);
-               // setContentView(R.layout.order_ready_screen);
-            }
-            if (currentOrder.getStatus().equals("done")){
-
-            }
-        });
-        */
         String orderState = dataBase.getState();
-        System.out.println("the current status is: " + orderState);
 
       // dataBase.deleteOrder(dataBase.currentOrderId); // todo delete
-        // todo remove
-       // String id = UUID.randomUUID().toString();
-       // Sandwich newSandwich = new Sandwich(id, "waiting", "2", true, true, "comment");
-      //  dataBase.addNewOrder(newSandwich);
-        // todo until here remove
+
        // dataBase.getAllDocuments();
        // dataBase.getCurrentDocument();
 
         if (!dataBase.existsCurrentOrder()) {
-            //setContentView(R.layout.new_order);
-            // todo open new screen
+
             // open edit activity screen
             Intent editIntent = new Intent(MainActivity.this, newOrderActivity.class);
-          //  startActivity(editIntent);
-            // todo check if current order id is not null
-            // put the relevant data into the intent
-            //String orderId = dataBase.getId();
-
-
-
-           // if (orderId != null) {
-           //     editIntent.putExtra("id", dataBase.getId());
-           // }
             startActivity(editIntent);
-           // setContentView(R.layout.new_order);
+
         } else {
             // todo get the state of the order
             String orderId = dataBase.getId();
-            System.out.println("i reached orderid ");
-         //   String orderState = dataBase.getSandwich().getStatus(); //todo fix
-          //  String orderState = dataBase.getState();
-           // String  orderState="waiting";
             orderState = dataBase.getState();
             if (orderState.equals(WAITING)){
-              //  System.out.println("error in state");
                 // edit order
                 Intent editIntent = new Intent(MainActivity.this, editActivity.class);
                 startActivity(editIntent);
             }
             else if (orderState.equals(IN_PROGRESS)){
-                // todo show in progress screen
                 setContentView(R.layout.order_in_the_making);
             }
             else if (orderState.equals(READY)){
                 setContentView(R.layout.order_ready_screen);
             }
-
-           // setContentView(R.layout.activity_main);
         }
-
     }
 }
