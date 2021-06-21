@@ -12,7 +12,8 @@
         android:layout_marginTop="60sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your order is ready"
+        android:text="Your order is ready!"
+        android:textSize="20sp"
         tools:layout_editor_absoluteX="171dp"
         tools:layout_editor_absoluteY="140dp" />
 

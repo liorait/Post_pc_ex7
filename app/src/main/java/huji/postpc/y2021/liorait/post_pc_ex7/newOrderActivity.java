@@ -56,34 +56,39 @@ public class newOrderActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String pickles = numberOfPicklesText.getText().toString();
-                int picklesNum = Integer.parseInt(pickles);
-                if (picklesNum > 10){
-                    Toast.makeText(context,"Wrong amount of pickles", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    boolean hummus = false;
-                    boolean tahini = false;
-                    String comment = "";
-                    String costumer_name = "";
+                String costumer_name = costumerName.getText().toString();
 
-                    // if hummus is checked
-                    if (hummusCB.isChecked()) {
-                        hummus = true;
+                if (costumer_name.equals("")) {
+                    Toast.makeText(context, "Please enter your name", Toast.LENGTH_SHORT).show();
+                } else {
+                    String pickles = numberOfPicklesText.getText().toString();
+                    int picklesNum = Integer.parseInt(pickles);
+                    if (picklesNum > 10) {
+                        Toast.makeText(context, "Wrong amount of pickles", Toast.LENGTH_SHORT).show();
+                    } else {
+                        boolean hummus = false;
+                        boolean tahini = false;
+                        String comment = "";
+                        //String costumer_name = "";
+
+                        // if hummus is checked
+                        if (hummusCB.isChecked()) {
+                            hummus = true;
+                        }
+                        if (tahiniCB.isChecked()) {
+                            tahini = true;
+                        }
+                        comment = commentText.getText().toString();
+                        costumer_name = costumerName.getText().toString();
+
+                        String orderId = UUID.randomUUID().toString();
+                        Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", picklesNum, hummus, tahini, comment);
+                        dataBase.addNewOrder(newSandwich);
+
+                        Intent editIntent = new Intent(newOrderActivity.this, editActivity.class);
+                        startActivity(editIntent);
+                        //setContentView(R.layout.edit_order);
                     }
-                    if (tahiniCB.isChecked()) {
-                        tahini = true;
-                    }
-                    comment = commentText.getText().toString();
-                    costumer_name = costumerName.getText().toString();
-
-                    String orderId = UUID.randomUUID().toString();
-                    Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", pickles, hummus, tahini, comment);
-                    dataBase.addNewOrder(newSandwich);
-
-                    Intent editIntent = new Intent(newOrderActivity.this, editActivity.class);
-                    startActivity(editIntent);
-                    //setContentView(R.layout.edit_order);
                 }
             }
         });

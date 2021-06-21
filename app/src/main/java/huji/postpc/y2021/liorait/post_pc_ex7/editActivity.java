@@ -1,5 +1,6 @@
 package huji.postpc.y2021.liorait.post_pc_ex7;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 public class editActivity extends Activity {
     public LocalDataBase dataBase = null;
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,24 +58,25 @@ public class editActivity extends Activity {
         EditText commentText = findViewById(R.id.editCommentsEditText);
         TextView costumerName = findViewById(R.id.nameTextView);
         saveButton.setEnabled(false);
-
-
+        Sandwich currentSandwich;
         // display information on the screen
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference document = firestore.collection("orders").document(dataBase.currentOrderId);
 
         document.get().addOnSuccessListener(documentSnapshot -> {
             Sandwich currentOrder = documentSnapshot.toObject(Sandwich.class);
-
-            numberOfPicklesText.setText(currentOrder.getPickles()); // show number of pickles
+            int pickles_num = currentOrder.getPickles();
+            String pickles = Integer.toString(pickles_num);
+            numberOfPicklesText.setText(pickles); // show number of pickles
             commentText.setText(currentOrder.getComment()); // show comment
-            if (currentOrder.hummus){
+            if (currentOrder.getHummus()){
                 hummusCB.setChecked(true);
             }
-            if (currentOrder.tahini){
+            if (currentOrder.getTahini()){
                 tahiniCB.setChecked(true);
             }
-            costumerName.setText(currentOrder.getCostumerName() + " ,Your order is waiting. You can edit your order");
+            String costumer_name = currentOrder.getCostumerName();
+            costumerName.setText(costumer_name + " ,Your order is waiting. You can edit your order");
 
         }).addOnCompleteListener(task -> {
             System.out.println("completed task");
@@ -99,6 +102,7 @@ public class editActivity extends Activity {
            // document.delete();
 
             dataBase.deleteOrder(dataBase.currentOrderId);
+            Toast.makeText(context,"Your order was successfuly deleted", Toast.LENGTH_SHORT).show();
             Intent newOrder = new Intent(editActivity.this, newOrderActivity.class);
             startActivity(newOrder);
             //setContentView(R.layout.new_order);
@@ -124,36 +128,40 @@ public class editActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Sandwich currentOrder = dataBase.getSandwich();
+                // Sandwich currentOrder = dataBase.getSandwich();
+                String costumer_name = costumerName.getText().toString();
 
-                String pickles = numberOfPicklesText.getText().toString();
-                int picklesNum = Integer.parseInt(pickles);
-                if (picklesNum > 10){
-                    Toast.makeText(context,"Wrong amount of pickles", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    boolean hummus = false;
-                    boolean tahini = false;
-                    String comment = "";
+                if (costumer_name.equals("")) {
+                    Toast.makeText(context, "Please enter your name", Toast.LENGTH_SHORT).show();
+                } else {
+                    String pickles = numberOfPicklesText.getText().toString();
+                    int picklesNum = Integer.parseInt(pickles);
+                    if (picklesNum > 10) {
+                        Toast.makeText(context, "Wrong amount of pickles", Toast.LENGTH_SHORT).show();
+                    } else {
+                        boolean hummus = false;
+                        boolean tahini = false;
+                        String comment = "";
 
-                    // if hummus is checked
-                    if (hummusCB.isChecked()) {
-                        hummus = true;
+                        // if hummus is checked
+                        if (hummusCB.isChecked()) {
+                            hummus = true;
+                        }
+                        if (tahiniCB.isChecked()) {
+                            tahini = true;
+                        }
+                        comment = commentText.getText().toString();
+                        costumer_name = costumerName.getText().toString();
+
+                        //  String orderId = currentOrder.getId();
+                        String orderId = dataBase.currentOrderId;
+                        Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", picklesNum, hummus, tahini, comment);
+                        dataBase.updateOrder(newSandwich);
+
+                        // todo show message that changes are saved
+                        Toast.makeText(context, "Order was successfully saved", Toast.LENGTH_SHORT).show();
+                        //setContentView(R.layout.activity_main);
                     }
-                    if (tahiniCB.isChecked()) {
-                        tahini = true;
-                    }
-                    comment = commentText.getText().toString();
-                    String costumer_name = costumerName.getText().toString(); // todo fix only name
-
-                    //  String orderId = currentOrder.getId();
-                    String orderId = dataBase.currentOrderId;
-                    Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", pickles, hummus, tahini, comment);
-                    dataBase.updateOrder(newSandwich);
-
-                    // todo show message that changes are saved
-                    Toast.makeText(context, "Order was successfully saved", Toast.LENGTH_SHORT).show();
-                    //setContentView(R.layout.activity_main);
                 }
             }
         });

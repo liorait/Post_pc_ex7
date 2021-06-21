@@ -9,37 +9,31 @@ import java.util.Date;
 
 public class Sandwich implements Serializable{
 
-     String id = null;
-     String costumer_name = "";
-     String pickles="0";
-     // todo change pickles field to int
-     boolean hummus=false;
-     boolean tahini=false;
-     String comment="";
-     String status="";
+    private String id = null;
+    private String costumerName=null;
+    private int pickles=0;
+    private boolean hummus=false;
+    private boolean tahini=false;
+    private String comment="";
+    private String status="";
 
     public Sandwich(){
-        //this.id = "id";
-        //this.status = "status";
-        //this.pickles = "0";
-        //this.hummus =false;
-       // this.tahini = false;
-       // this.comment = "comment";
     }
 
-    public Sandwich(String id, String name, String status, String pickles, boolean hummus, boolean tahini, String comment) {
+    public Sandwich(String id, String name, String status, int pickles, boolean hummus, boolean tahini, String comment) {
         this.id = id;
-        this.costumer_name = name;
+        this.costumerName = name;
         this.status = status;
         this.pickles = pickles;
-        this.hummus =hummus;
+        this.hummus = hummus;
         this.tahini = tahini;
         this.comment = comment;
     }
 
     public String toString(){
-        return " id: " + this.id + " costumer name: " + this.costumer_name + " status: " + this.status + " pickles: " + this.pickles + " hummus: " +
-                this.hummus + " tahinh: " + this.tahini + " comment: " + this.comment;
+        String pickles_str = Integer.toString(pickles);
+        return " id: " + this.id + " costumer name: " + this.costumerName + " status: " + this.status + " pickles: " + pickles_str + " hummus: " +
+                this.hummus + " tahini: " + this.tahini + " comment: " + this.comment;
      }
 
     public void setStatus(String status) {
@@ -51,7 +45,7 @@ public class Sandwich implements Serializable{
     }
 
     public String getCostumerName() {
-        return costumer_name;
+        return costumerName;
     }
 
     public String getStatus() {
@@ -62,7 +56,7 @@ public class Sandwich implements Serializable{
         return comment;
     }
 
-    public String getPickles() {
+    public int getPickles() {
         return pickles;
     }
 

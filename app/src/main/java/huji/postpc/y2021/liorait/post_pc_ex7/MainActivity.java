@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
        // Sandwich newSandwich = new Sandwich(id, "waiting", "2", true, true, "comment");
       //  dataBase.addNewOrder(newSandwich);
         // todo until here remove
-        dataBase.getAllDocuments();
+       // dataBase.getAllDocuments();
        // dataBase.getCurrentDocument();
 
         if (!dataBase.existsCurrentOrder()) {

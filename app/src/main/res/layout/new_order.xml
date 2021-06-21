@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/sandwichImageView"
-        android:text="Welcome                       "
+        android:text="New order                       "
         tools:layout_editor_absoluteX="55dp"
         tools:layout_editor_absoluteY="111dp" />
 
@@ -127,7 +127,7 @@
         app:layout_constraintBottom_toTopOf="@id/welcomeTextView"
         android:layout_marginBottom="20sp"
         android:inputType="textPersonName"
-        android:text="Name: " />
+        android:hint="Name: " />
 
     <ImageView
         android:id="@+id/x_image"
@@ -211,7 +211,7 @@
 
     <Button
         android:id="@+id/saveImageButton"
-        android:text="saveBtn"
+        android:text="Save"
         android:layout_width="83dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

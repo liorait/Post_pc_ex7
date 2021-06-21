@@ -37,16 +37,10 @@ public class LocalDataBase {
     private final SharedPreferences sp;
     public String currentOrderId = null; // ID for SP
     public String current_state = "waiting";
-
-
-    //private String state = null;
     String ORDERS = "orders";
-    //private Sandwich sandwich;
 
     ArrayList<Sandwich> sandwiches_list = new ArrayList<>();
-    // todo create local list saving the data that is saved in firestore
     private HashMap<String, Sandwich> all_orders = new HashMap<>();
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public LocalDataBase(Context context){

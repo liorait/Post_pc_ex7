@@ -7,12 +7,24 @@
 
     <TextView
         android:id="@+id/textView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="60sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your order is on the making.."
-        tools:layout_editor_absoluteX="116dp"
-        tools:layout_editor_absoluteY="166dp" />
+        android:text="Your order is on the making..
+we will let you know once the order is ready"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="188dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:indeterminateOnly="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
