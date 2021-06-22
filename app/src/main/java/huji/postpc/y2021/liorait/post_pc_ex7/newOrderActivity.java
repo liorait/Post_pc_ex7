@@ -58,7 +58,7 @@ public class newOrderActivity extends Activity {
         EditText costumerName = findViewById(R.id.editTextTextPersonName);
 
         if (savedInstanceState != null){
-            Serializable saved_output = savedInstanceState.getSerializable("saved_state");
+            Serializable saved_output = savedInstanceState.getSerializable("saved_state_new_order");
             loadState(saved_output);
         }
 
@@ -160,14 +160,14 @@ public class newOrderActivity extends Activity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Serializable serializable = saveState();
-        outState.putSerializable("saved_state", serializable);
+        outState.putSerializable("saved_state_new_order", serializable);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Serializable saved_output = savedInstanceState.getSerializable("saved_state");
+        Serializable saved_output = savedInstanceState.getSerializable("saved_state_new_order");
         loadState(saved_output);
     }
 

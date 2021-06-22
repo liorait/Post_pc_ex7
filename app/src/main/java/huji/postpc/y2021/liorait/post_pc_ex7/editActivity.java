@@ -68,7 +68,6 @@ public class editActivity extends Activity {
             loadState(saved_output);
         }
 
-
         // display information on the screen
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference document = firestore.collection("orders").document(dataBase.currentOrderId);
@@ -120,7 +119,9 @@ public class editActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String costumer_name = costumerName.getText().toString();
+                String editName = costumerName.getText().toString();
+                String replacer = editName.replace(",Your order is waiting. You can edit your order", "");
+                String costumer_name = replacer;
 
                 if (costumer_name.equals("")) {
                     Toast.makeText(context, "Please enter your name", Toast.LENGTH_SHORT).show();
@@ -142,25 +143,18 @@ public class editActivity extends Activity {
                             tahini = true;
                         }
                         comment = commentText.getText().toString();
-                        costumer_name = costumerName.getText().toString();
 
                         String orderId = dataBase.currentOrderId;
                         Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", picklesNum, hummus, tahini, comment);
                         dataBase.updateOrder(newSandwich);
-
                         Toast.makeText(context, "Order was successfully saved", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
 
-
-
         MinusBtn.setOnClickListener(v -> {
             int parsed = Integer.parseInt(numberOfPicklesText.getText().toString());
-            //  if (parsed > 10){
-            //     return;
-            //  }
 
             if (parsed - 1 >= 0) {
                 String s = Integer.toString(parsed - 1);
@@ -170,9 +164,6 @@ public class editActivity extends Activity {
 
         PlusBtn.setOnClickListener(v -> {
             int parsed = Integer.parseInt(numberOfPicklesText.getText().toString());
-            // if (parsed > 10){
-            //    return;
-            // }
             if (parsed + 1 <= 10) {
                 String s = Integer.toString(parsed + 1);
                 numberOfPicklesText.setText(s);
@@ -211,8 +202,6 @@ public class editActivity extends Activity {
                 }
             }
         });
-
-
     }
 
     @Override
@@ -236,11 +225,15 @@ public class editActivity extends Activity {
         super.onRestoreInstanceState(savedInstanceState);
         Serializable saved_output = savedInstanceState.getSerializable("saved_state");
         loadState(saved_output);
+
+
+      //  String prev_output = typo.output();
+        //TextView calcOutput = findViewById(R.id.textViewCalculatorOutput);
+        //calcOutput.setText(prev_output);
     }
 
     public Serializable saveState() {
         newOrderActivity.OrderState order_state = new newOrderActivity.OrderState();
-
 
         EditText numberOfPicklesText = findViewById(R.id.editNumberPicklesText);
         CheckBox hummusCB = findViewById(R.id.addHummusCheckBox);
@@ -249,7 +242,11 @@ public class editActivity extends Activity {
         TextView costumerName = findViewById(R.id.nameTextView);
 
         order_state.comment = commentText.getText().toString();
-        order_state.costumer_name = costumerName.getText().toString();
+        String editName = costumerName.getText().toString();
+        String replacer = editName.replace(",Your order is waiting. You can edit your order", "");
+        order_state.costumer_name = replacer;
+       // order_state.costumer_name = costumerName.getText().toString();
+
         if (hummusCB.isChecked()){
             order_state.hummus = true;
         }
@@ -278,12 +275,15 @@ public class editActivity extends Activity {
         CheckBox hummusCB = findViewById(R.id.addHummusCheckBox);
         CheckBox tahiniCB = findViewById(R.id.addTahiniCheckBox);
         EditText commentText = findViewById(R.id.editCommentsEditText);
-        EditText costumerName = findViewById(R.id.editTextTextPersonName);
+        TextView costumerName = findViewById(R.id.nameTextView);
 
         String pickles = Integer.toString(casted.number_of_pickles);
         numberOfPicklesText.setText(pickles);
         commentText.setText(casted.comment);
+       // if (costumerName != null) {
         costumerName.setText(casted.costumer_name);
+        // todo bug in costumer name
+       // }
 
         if (casted.hummus){
             hummusCB.setChecked(true);
