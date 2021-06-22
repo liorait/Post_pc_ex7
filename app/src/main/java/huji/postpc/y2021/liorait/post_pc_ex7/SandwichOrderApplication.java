@@ -42,7 +42,6 @@ public class SandwichOrderApplication extends Application {
                     dataBase.setState(currentOrder.getStatus());
                 }
 
-
             }).addOnCompleteListener(task -> {
                 Log.i("tag", "completed task");
                 order_state.set(dataBase.getState());

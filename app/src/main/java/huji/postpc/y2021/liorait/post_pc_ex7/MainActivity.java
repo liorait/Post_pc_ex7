@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     String DONE = "done";
     String WAITING = "waiting";
     String IN_PROGRESS = "in progress";
-    //ListenerRegistration listener;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override

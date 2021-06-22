@@ -37,7 +37,6 @@ public class LocalDataBase {
     private final SharedPreferences sp;
     public String currentOrderId = null; // ID for SP
     private String current_state = "waiting";
-    String ORDERS = "orders";
 
     ArrayList<Sandwich> sandwiches_list = new ArrayList<>();
     private HashMap<String, Sandwich> all_orders = new HashMap<>();
@@ -81,7 +80,6 @@ public class LocalDataBase {
         // update the sp
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(currentOrderId); // remove the key
-        // editor.clear(); // delete all info from sp
         editor.apply();
 
         currentOrderId = null;
@@ -103,14 +101,14 @@ public class LocalDataBase {
         return currentOrderId;
     }
 
-    private void getCurrentOrderStateFromFirestore(){
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("orders").document(currentOrderId).get().addOnSuccessListener(documentSnapshot -> {
-            Sandwich sandwich = documentSnapshot.toObject(Sandwich.class);
-            current_state = sandwich.getStatus();
-        });
+   // private void getCurrentOrderStateFromFirestore(){
+     ///   FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        //firestore.collection("orders").document(currentOrderId).get().addOnSuccessListener(documentSnapshot -> {
+         //   Sandwich sandwich = documentSnapshot.toObject(Sandwich.class);
+          //  current_state = sandwich.getStatus();
+        //});
       //  return state;
-    }
+    //}
 
     // returns the current state of the order
     public String getState(){
@@ -139,7 +137,7 @@ public class LocalDataBase {
         // add to firestore firebase
         addToFirestore(newOrder);
     }
-
+/**
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void getAllDocuments(){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -163,7 +161,7 @@ public class LocalDataBase {
         // got all sandwiches currently saved in firestore
         System.out.println(sandwiches_list);
     }
-
+*/
     // Adds a new order to firestore database
     private void addToFirestore(Sandwich newOrder){
 

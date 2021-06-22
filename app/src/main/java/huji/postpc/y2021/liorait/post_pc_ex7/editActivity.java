@@ -225,11 +225,6 @@ public class editActivity extends Activity {
         super.onRestoreInstanceState(savedInstanceState);
         Serializable saved_output = savedInstanceState.getSerializable("saved_state");
         loadState(saved_output);
-
-
-      //  String prev_output = typo.output();
-        //TextView calcOutput = findViewById(R.id.textViewCalculatorOutput);
-        //calcOutput.setText(prev_output);
     }
 
     public Serializable saveState() {
@@ -245,7 +240,6 @@ public class editActivity extends Activity {
         String editName = costumerName.getText().toString();
         String replacer = editName.replace(",Your order is waiting. You can edit your order", "");
         order_state.costumer_name = replacer;
-       // order_state.costumer_name = costumerName.getText().toString();
 
         if (hummusCB.isChecked()){
             order_state.hummus = true;
@@ -282,7 +276,6 @@ public class editActivity extends Activity {
         commentText.setText(casted.comment);
        // if (costumerName != null) {
         costumerName.setText(casted.costumer_name);
-        // todo bug in costumer name
        // }
 
         if (casted.hummus){
@@ -292,5 +285,4 @@ public class editActivity extends Activity {
             tahiniCB.setChecked(true);
         }
     }
-
 }
