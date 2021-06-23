@@ -70,7 +70,7 @@ public class editActivity extends Activity {
 
         // display information on the screen
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference document = firestore.collection("orders").document(dataBase.currentOrderId);
+        DocumentReference document = firestore.collection("orders").document(dataBase.getId());
 
         document.get().addOnSuccessListener(documentSnapshot -> {
             Sandwich currentOrder = documentSnapshot.toObject(Sandwich.class);
@@ -109,7 +109,7 @@ public class editActivity extends Activity {
         });
 
         deleteButton.setOnClickListener(v -> {
-            dataBase.deleteOrder(dataBase.currentOrderId);
+            dataBase.deleteOrder(dataBase.getId());
             Toast.makeText(context,"Your order was successfully deleted", Toast.LENGTH_SHORT).show();
             Intent newOrder = new Intent(editActivity.this, newOrderActivity.class);
             startActivity(newOrder);
@@ -144,7 +144,7 @@ public class editActivity extends Activity {
                         }
                         comment = commentText.getText().toString();
 
-                        String orderId = dataBase.currentOrderId;
+                        String orderId = dataBase.getId();
                         Sandwich newSandwich = new Sandwich(orderId, costumer_name, "waiting", picklesNum, hummus, tahini, comment);
                         dataBase.updateOrder(newSandwich);
                         Toast.makeText(context, "Order was successfully saved", Toast.LENGTH_SHORT).show();

@@ -35,7 +35,7 @@ public class LocalDataBase {
 
     private final Context context;
     private final SharedPreferences sp;
-    public String currentOrderId = null; // ID for SP
+    private String currentOrderId = null; // ID for SP
     private String current_state = "waiting";
 
     ArrayList<Sandwich> sandwiches_list = new ArrayList<>();

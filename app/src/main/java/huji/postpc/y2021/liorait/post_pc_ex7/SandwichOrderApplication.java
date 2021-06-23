@@ -32,9 +32,9 @@ public class SandwichOrderApplication extends Application {
         // todo update the db info from firestore?
 
         AtomicReference<String> order_state = new AtomicReference<>("");
-        if (dataBase.currentOrderId != null) {
+        if (dataBase.getId() != null) {
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-            DocumentReference document = firestore.collection("orders").document(dataBase.currentOrderId);
+            DocumentReference document = firestore.collection("orders").document(dataBase.getId());
 
             document.get().addOnSuccessListener(documentSnapshot -> {
                 Sandwich currentOrder = documentSnapshot.toObject(Sandwich.class);
