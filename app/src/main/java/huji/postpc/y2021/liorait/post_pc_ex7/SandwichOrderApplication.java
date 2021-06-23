@@ -29,7 +29,6 @@ public class SandwichOrderApplication extends Application {
         instance = this;
 
         dataBase = new LocalDataBase(this); // pass the current context to allow broadcasts
-        // todo update the db info from firestore?
 
         AtomicReference<String> order_state = new AtomicReference<>("");
         if (dataBase.getId() != null) {

@@ -34,7 +34,6 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     public LocalDataBase dataBase = null;
-    boolean existsOrder = false;
     String READY = "ready";
     String DONE = "done";
     String WAITING = "waiting";
@@ -49,10 +48,9 @@ public class MainActivity extends AppCompatActivity {
             dataBase = SandwichOrderApplication.getInstance().getDataBase();
         }
 
-        String orderState = dataBase.getState();
+        String orderState;
 
       // dataBase.deleteOrder(dataBase.currentOrderId); // todo delete
-
        // dataBase.getAllDocuments();
        // dataBase.getCurrentDocument();
 
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(editIntent);
 
         } else {
-            // todo get the state of the order
+
             String orderId = dataBase.getId();
             orderState = dataBase.getState();
             if (orderState.equals(WAITING)){

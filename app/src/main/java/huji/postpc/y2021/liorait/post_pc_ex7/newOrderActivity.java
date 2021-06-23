@@ -102,9 +102,6 @@ public class newOrderActivity extends Activity {
 
         MinusBtn.setOnClickListener(v -> {
             int parsed = Integer.parseInt(numberOfPicklesText.getText().toString());
-            //  if (parsed > 10){
-            //     return;
-            //  }
 
             if (parsed - 1 >= 0) {
                 String s = Integer.toString(parsed - 1);
@@ -114,9 +111,7 @@ public class newOrderActivity extends Activity {
 
         PlusBtn.setOnClickListener(v -> {
             int parsed = Integer.parseInt(numberOfPicklesText.getText().toString());
-            // if (parsed > 10){
-            //    return;
-            // }
+
             if (parsed + 1 <= 10) {
                 String s = Integer.toString(parsed + 1);
                 numberOfPicklesText.setText(s);
