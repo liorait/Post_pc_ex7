@@ -98,7 +98,9 @@ public class editActivity extends Activity {
                 Sandwich currentOrder = value.toObject(Sandwich.class);
                 if (currentOrder.getStatus().equals("in_progress")) {
                     dataBase.setState("in_progress");
-                    setContentView(R.layout.order_in_the_making);
+                    //setContentView(R.layout.order_in_the_making);
+                    Intent orderInProgress = new Intent(editActivity.this, OrderInTheMaking.class);
+                    startActivity(orderInProgress);
                 }
                 if (currentOrder.getStatus().equals("ready")) {
                     Intent orderReadyIntent = new Intent(editActivity.this, OrderReady.class);

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         String orderState;
 
-      // dataBase.deleteOrder(dataBase.currentOrderId); // todo delete
+      // dataBase.deleteOrder(dataBase.currentOrderId);
        // dataBase.getAllDocuments();
        // dataBase.getCurrentDocument();
 
@@ -70,10 +70,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(editIntent);
             }
             else if (orderState.equals(IN_PROGRESS)){
+               // Intent editIntent = new Intent(MainActivity.this, OrderInTheMaking.class);
+               // startActivity(editIntent);
                 setContentView(R.layout.order_in_the_making);
             }
             else if (orderState.equals(READY)){
                 setContentView(R.layout.order_ready_screen);
+               // Intent editIntent = new Intent(MainActivity.this, OrderReady.class);
+               // startActivity(editIntent);
             }
         }
     }
