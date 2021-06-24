@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "508719810883",
+    "project_id": "postpcex7-856a8",
+    "storage_bucket": "postpcex7-856a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508719810883:android:5405058b19bb855d39c7f6",
+        "android_client_info": {
+          "package_name": "huji.postpc.y2021.liorait.post_pc_ex7"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "508719810883-5sftins1f3mn3rp4ndocf7uodbno1bnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoktPjAy68ocV83BDkOPiR7FItHlEZhEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508719810883-5sftins1f3mn3rp4ndocf7uodbno1bnp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

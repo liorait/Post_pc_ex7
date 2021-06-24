@@ -50,10 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         String orderState;
 
-      // dataBase.deleteOrder(dataBase.currentOrderId);
-       // dataBase.getAllDocuments();
-       // dataBase.getCurrentDocument();
-
         if (!dataBase.existsCurrentOrder()) {
 
             // open edit activity screen
