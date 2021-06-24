@@ -213,6 +213,12 @@ public class editActivity extends Activity {
         listener.remove();
     }
 
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        Toast.makeText(editActivity.this,"There is no option to go to previous screen",Toast.LENGTH_LONG).show();
+    }
+
     // flip screen
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {

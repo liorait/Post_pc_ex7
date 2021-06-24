@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -50,5 +51,11 @@ public class OrderInTheMaking extends Activity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        Toast.makeText(OrderInTheMaking.this,"There is no option to go to previous screen",Toast.LENGTH_LONG).show();
     }
 }

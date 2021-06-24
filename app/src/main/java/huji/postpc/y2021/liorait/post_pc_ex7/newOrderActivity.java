@@ -221,6 +221,11 @@ public class newOrderActivity extends Activity {
     }
 
     @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        Toast.makeText(newOrderActivity.this,"There is no option to go to previous screen",Toast.LENGTH_LONG).show();
+    }
+    @Override
     protected void onDestroy() {
         super.onDestroy();
     }

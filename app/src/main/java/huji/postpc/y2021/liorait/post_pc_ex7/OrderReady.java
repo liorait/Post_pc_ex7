@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -32,6 +33,12 @@ public class OrderReady extends Activity {
             Intent newOrder = new Intent(OrderReady.this, newOrderActivity.class);
             startActivity(newOrder);
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        Toast.makeText(OrderReady.this,"There is no option to go to previous screen",Toast.LENGTH_LONG).show();
     }
 }
 
