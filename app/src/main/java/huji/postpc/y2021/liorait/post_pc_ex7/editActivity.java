@@ -101,11 +101,13 @@ public class editActivity extends Activity {
                     //setContentView(R.layout.order_in_the_making);
                     Intent orderInProgress = new Intent(editActivity.this, OrderInTheMaking.class);
                     startActivity(orderInProgress);
+                    this.finish();
                 }
                 if (currentOrder.getStatus().equals("ready")) {
                     Intent orderReadyIntent = new Intent(editActivity.this, OrderReady.class);
                     dataBase.setState("ready");
                     startActivity(orderReadyIntent);
+                    this.finish();
                 }
             }
         });
@@ -115,6 +117,7 @@ public class editActivity extends Activity {
             Toast.makeText(context,"Your order was successfully deleted", Toast.LENGTH_SHORT).show();
             Intent newOrder = new Intent(editActivity.this, newOrderActivity.class);
             startActivity(newOrder);
+            this.finish();
         });
 
 

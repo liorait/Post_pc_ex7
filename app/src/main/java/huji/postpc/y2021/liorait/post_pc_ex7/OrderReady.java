@@ -32,6 +32,7 @@ public class OrderReady extends Activity {
             dataBase.gotOrder(); // notify that received the order (change the order state to 'done' and delete the order from sp)
             Intent newOrder = new Intent(OrderReady.this, newOrderActivity.class);
             startActivity(newOrder);
+            this.finish();
         });
     }
 

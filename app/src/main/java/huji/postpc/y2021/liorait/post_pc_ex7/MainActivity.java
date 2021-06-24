@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 // edit order
                 Intent editIntent = new Intent(MainActivity.this, editActivity.class);
                 startActivity(editIntent);
+                this.finish();
             }
             else if (orderState.equals(IN_PROGRESS)){
                // Intent editIntent = new Intent(MainActivity.this, OrderInTheMaking.class);

@@ -47,6 +47,7 @@ public class OrderInTheMaking extends Activity {
                     Intent orderReadyIntent = new Intent(OrderInTheMaking.this, OrderReady.class);
                     dataBase.setState("ready");
                     startActivity(orderReadyIntent);
+                    this.finish();
                 }
             }
         });
